@@ -1,7 +1,7 @@
 local config = require('config.shared')
 
 local function OpenVehicleMenu()
-    local playerPed = PlayerPedId()
+    local playerPed = cache.ped
 
     if IsPedInAnyVehicle(playerPed, false) then
         local vehicle = GetVehiclePedIsIn(playerPed, false)

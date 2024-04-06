@@ -1,0 +1,5 @@
+return {
+    class = {
+        turismor = "S+"
+    }
+}

@@ -10,5 +10,5 @@
 - [qbx_core](https://github.com/Qbox-project/qbx_core)
 
 ## Usage
-To retrieve vehicle information, simply use the following command:
+To get vehicle information, simply use the following command:
 /vehinfo

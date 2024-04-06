@@ -1,13 +1,14 @@
 local config = require('config.shared')
 
 local function OpenVehicleMenu()
-    local playerPed = PlayerPedId()
+    local playerPed = cache.ped
 
     if IsPedInAnyVehicle(playerPed, false) then
         local vehicle = GetVehiclePedIsIn(playerPed, false)
-        local vehicleName = qbx.getVehicleDisplayName(vehicle)
+        
         local vehicleModelHash = GetEntityModel(vehicle)
         local vehicleSpawnCode = string.lower(GetDisplayNameFromVehicleModel(vehicleModelHash))
+        local vehicleName = GetLabelText(GetDisplayNameFromVehicleModel(vehicleModelHash))
         local vehicleClass = config.class[vehicleSpawnCode]
 
         local engineMod = GetVehicleMod(vehicle, 11) 
@@ -23,9 +24,9 @@ local function OpenVehicleMenu()
 
 
         if vehicleName == 'NULL' then
-            exports.qbx_core:Notify('Vehicle name not defined.', 'error')
+            lib.notify({ description = 'Vehicle name not defined', type = 'error' })
         elseif vehicleClass == nil then
-            exports.qbx_core:Notify('Vehicle class not defined in config', 'error')
+            lib.notify({ description = 'Vehicle class not defined in config', type = 'error' })
         else
             lib.registerContext({
                 id = 'vehicle_menu',
@@ -71,7 +72,7 @@ local function OpenVehicleMenu()
             lib.showContext('vehicle_menu')
         end
     else
-        exports.qbx_core:Notify('You are not in a vehicle.', 'error')
+        lib.notify({ description = 'You are not in a vehicle', type = 'error' })
     end
 end
 

@@ -9,7 +9,6 @@
 
 ## Dependencies
 - [ox_lib](https://github.com/overextended/ox_lib)
-- [qbx_core](https://github.com/Qbox-project/qbx_core)
 
 ## Usage
 To get vehicle information, simply use the following command:

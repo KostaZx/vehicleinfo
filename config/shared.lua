@@ -1,5 +1,0 @@
-return {
-    class = {
-        turismor = "S+"
-    }
-}

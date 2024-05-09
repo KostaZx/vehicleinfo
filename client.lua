@@ -1,10 +1,23 @@
-local config = require('config.shared')
+local config = lib.require('config')
+
+function vehicleHealthColor(progress)
+    if progress >= 75 then
+        return 'green'
+    elseif progress < 75 and progress >= 50 then
+        return 'yellow'
+    elseif progress < 50 and progress >= 25 then
+        return 'orange'
+    elseif progress < 25 and progress >= 0 then
+        return 'red'
+    end
+end
+
 
 local function OpenVehicleMenu()
-    local playerPed = cache.ped
 
-    if IsPedInAnyVehicle(playerPed, false) then
-        local vehicle = GetVehiclePedIsIn(playerPed, false)
+    if cache.vehicle then
+        local vehicle = cache.vehicle
+        local fuelProgress
         
         local vehicleModelHash = GetEntityModel(vehicle)
         local vehicleSpawnCode = string.lower(GetDisplayNameFromVehicleModel(vehicleModelHash))
@@ -21,6 +34,12 @@ local function OpenVehicleMenu()
         brakeMod = brakeMod ~= -1 and tostring(brakeMod).." LVL" or 'Stock'
         suspensionMod = suspensionMod ~= -1 and tostring(suspensionMod).." LVL" or 'Stock'
         transmissionMod = transmissionMod ~= -1 and tostring(transmissionMod).." LVL" or 'Stock'
+
+        if config.fuel == 'ox_fuel' then
+            fuelProgress = Entity(vehicle)?.state and Entity(vehicle)?.state.fuel or GetVehicleFuelLevel(vehicle)
+        else
+            fuelProgress = exports[config.Fuel]:GetFuel(vehicle)
+        end
 
 
         if vehicleName == 'NULL' then
@@ -42,6 +61,36 @@ local function OpenVehicleMenu()
                         description = 'Class: ' .. vehicleClass,
                         icon = 'fa-solid fa-chart-simple',
                     },
+                    {
+                        title = ('Fuel Level: %s'):format(tostring(math.ceil(fuelProgress))),
+                        progress = math.ceil(fuelProgress),
+                        colorScheme = '#FFFF00',
+                        icon = 'fas fa-gas-pump'
+                    },
+                    {
+                        title = ('Engine Health: %s'):format(tostring(math.ceil(lib.getVehicleProperties(vehicle).engineHealth / 10))),
+                        progress = (lib.getVehicleProperties(vehicle).engineHealth / 10),
+                        colorScheme = vehicleHealthColor(math.ceil(lib.getVehicleProperties(vehicle).engineHealth / 10)),
+                        icon = 'fas fa-car-battery'
+                    },
+                    {
+                        title = ('Body Health: %s'):format(tostring(math.ceil(lib.getVehicleProperties(vehicle).bodyHealth / 10))),
+                        progress = (lib.getVehicleProperties(vehicle).bodyHealth / 10),
+                        colorScheme = vehicleHealthColor(math.ceil(lib.getVehicleProperties(vehicle).bodyHealth / 10)),
+                        icon = 'fas fa-car-burst'
+                    },
+                    {
+                        title = 'Vehicle Primary Color',
+                        description = 'Color: ' .. lib.getVehicleProperties(vehicle).color1,
+                        icon = 'fa-solid fa-car',
+                    },
+                    {
+                        title = 'Vehicle Secondary Color',
+                        description = 'Color: ' .. lib.getVehicleProperties(vehicle).color2,
+                        icon = 'fa-solid fa-car',
+                    },
+
+
                     {
                         title = 'Vehicle Engine',
                         description = 'Engine: ' .. engineMod,
@@ -77,3 +126,5 @@ local function OpenVehicleMenu()
 end
 
 RegisterCommand("vehinfo", OpenVehicleMenu)
+
+

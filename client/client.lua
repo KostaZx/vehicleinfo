@@ -69,7 +69,7 @@ local function OpenVehicleMenu()
                 },
                 {
                     title = 'Fuel Level',
-                    description = ('Level: %s'):format(tostring(math.ceil(fuelProgress))),
+                    description = ('Level: %s%%'):format(tostring(math.ceil(fuelProgress))),
                     progress = math.ceil(fuelProgress),
                     colorScheme = '#FFFF00',
                     icon = 'fas fa-gas-pump'
